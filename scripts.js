@@ -1,6 +1,13 @@
 const gameboard = (function (){
     let board = [];
 
+    let clearBoard = function(){
+        board=[];
+        for(let i=0; i<9;i++){
+            board.push("");
+        }
+    }
+
     // Populate the board
     clearBoard(); 
    
@@ -20,11 +27,7 @@ const gameboard = (function (){
         return true;
     }
 
-    let clearBoard = function(){
-        for(let i=0; i<9;i++){
-            board.push("");
-        }
-    }
+    
 
 
     let printBoard = function(){
