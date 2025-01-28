@@ -1,0 +1,86 @@
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  * {
+    margin: 0;
+  }
+  
+  body {
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+  
+  input, button, textarea, select {
+    font: inherit;
+  }
+  
+  p, h1, h2, h3, h4, h5, h6 {
+    overflow-wrap: break-word;
+  }
+  
+  p {
+    text-wrap: pretty;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+  
+  #root, #__next {
+    isolation: isolate;
+  }
+  /* end css styles reset */
+
+
+  body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 3rem;
+    gap: 1rem;
+  }
+
+  .players-container{
+    display: flex;
+    gap: 5rem;
+  }
+
+  .player{
+    border: 1px solid black;
+    padding: 1rem 3rem;
+    border-radius: 1rem;
+  }
+
+  .gameboard{
+    display: grid;
+    grid-template-columns: repeat(3,10rem);
+    grid-template-rows: repeat(3,10rem);
+    gap: 3px;
+    background-color: black;
+  }
+
+  .box{
+    background-color: white;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .cross{
+    background-image: url("./assets/cross.svg");
+  }
+
+  .circle{
+    background-image: url("./assets/circle.svg");
+
+  }
