@@ -142,11 +142,96 @@ const gameController = (function(){
             boardState = checkWinner();
         }
 
-        console.log(boardState);
+        return boardState;
 
     }
 
 
+    const resetGame =  function(){
+        gameboard.clearBoard();
+        turn=1;
+        playerTurn = players[0];
+        boardState=0;
+    }
+
+
     
-    return {returnPlayers,playRound}
+    return {returnPlayers,playRound,getplayerTurn,resetGame}
 })();
+
+
+const displayController = (function(){
+    const gameboard = document.getElementsByClassName("gameboard")[0];
+    let gameState = 0;
+
+    const displayGrid = function(){
+        
+        for(let i=0;i<9;i++){
+            let box = document.createElement("div");
+            box.classList.add("box");
+            box.dataset.position = i;
+            gameboard.appendChild(box);  
+        }
+        
+    }
+
+    const addPiece = function(position,piece){
+        let box = document.getElementsByClassName("box")[position];
+        let type = piece=="x"? "cross":"circle";
+        box.classList.add(type);
+    }
+
+    const clearBoard = function(){
+        let boxes =document.getElementsByClassName("box"); 
+        for(let i=0;i<boxes.length;i++){
+            boxes[i].classList.remove("cross","circle");
+        }
+    }
+
+    const displayTurn = function(player){
+        const container = document.querySelector(".player-turn span");
+        container.textContent = player;
+    }
+
+    const attachClicks = function(){
+        let boxes =document.getElementsByClassName("box"); 
+        let reset = document.getElementById("reset_btn");
+
+
+        // attach reset click
+        reset.addEventListener("click",resetGame);
+
+        // Attach grid clicks
+        for(let i=0;i<boxes.length;i++){
+            boxes[i].addEventListener("click",playRound);
+        }
+
+    }
+
+    const playRound = function(event){
+        let box = event.srcElement;
+        let position =box.dataset.position; 
+
+        if(box.classList.contains("cross","circle") | gameState!=0 ) return;
+
+        addPiece(position,gameController.getplayerTurn());
+        gameState = gameController.playRound(position);
+        displayTurn(gameController.getplayerTurn());
+
+        if(gameState==1)console.log("We have a winner")
+        
+    }
+
+    const resetGame = function(){
+        clearBoard();
+        gameController.resetGame();
+        gameState=0;
+    }
+
+    return {displayGrid,addPiece,displayTurn,attachClicks}
+
+
+})();
+
+displayController.displayGrid();
+displayController.attachClicks();
