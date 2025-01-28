@@ -75,15 +75,19 @@ const gameController = (function(){
     let playerTurn = players[0];
 
     // This variable has three possible states 
-    // -1 -> draw
-    //  0 -> no winner
+    // -1 -> no winner
+    //  0 -> draw
     //  1 -> winner
-    let boardState = -1;
+    let boardState = 0;
 
     const returnPlayers = function(){
         return  {player1:players[0],player2:players[1]};
     }
     const switchTurn = ()=> playerTurn= (playerTurn==players[0])? players[1]: players[0];
+
+    const getplayerTurn = function(){
+        return playerTurn.getPlayerChar();
+    }
 
     // 0 1 2 
     // 3 4 5 
@@ -93,15 +97,15 @@ const gameController = (function(){
     // j*3 + i check by column
 
     function checkWinner(){
+        const boardArray = gameboard.getBoard();
         for(let i=0; i < 3; i++){
-            const boardArray = gameboard.getBoard();
             // check by row 
-            if( (boardArray[i*3+ 0] == boardArray[i*3+ 1]) && (boardArray[i*3+ 1] == boardArray[i*3+ 2]) ){
+            if( (boardArray[(i*3+ 0)] == boardArray[(i*3+ 1)]) && (boardArray[(i*3+ 1)] == boardArray[(i*3+ 2)]) && boardArray[(i*3+ 0)]!="" ){
                 return 1;
             }
 
             // check by column
-            if( (boardArray[i] == boardArray[i + 3]) && (boardArray[i + 3]== boardArray[i+6]) ){
+            if( (boardArray[i] == boardArray[i + 3]) && (boardArray[i + 3]== boardArray[i+6]) && boardArray[(i)]!=""){
                 return 1;
             }
 
@@ -109,20 +113,20 @@ const gameController = (function(){
 
 
         // check by diagonal 
-        if( (boardArray[0] == boardArray[4]) && (boardArray[4]== boardArray[8]) ){
+        if( (boardArray[0] == boardArray[4]) && (boardArray[4]== boardArray[8]) && boardArray[0]!=""){
             return 1;
         }
 
-        if( (boardArray[6] == boardArray[4]) && (boardArray[4]== boardArray[2]) ){
+        if( (boardArray[6] == boardArray[4]) && (boardArray[4]== boardArray[2]) && boardArray[6]!=""){
             return 1;
         }
 
 
         // Draw if array is full
-        if( !boardArray.includes("") ) return 0;
+        if( !boardArray.includes("") ) return -1;
 
         // game continues
-        return -1;
+        return 0;
 
     }
 
