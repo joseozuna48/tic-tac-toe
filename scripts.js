@@ -44,7 +44,7 @@ const gameboard = (function (){
             boardText = boardText + char + separator;
         }
 
-        console.log(boardText);
+        // console.log(boardText);
     }
 
     return { getBoard,fillSquare,clearBoard }
@@ -134,15 +134,17 @@ const gameController = (function(){
     const playRound = function(position){
 
         gameboard.fillSquare(position,playerTurn.getPlayerChar());
-        switchTurn();
-
-        turn++;
         if(turn >= 5){
             // Check for winner
             boardState = checkWinner();
         }
 
-        return boardState;
+        if(boardState !=0) return boardState; //game ended
+        
+        switchTurn();
+
+        turn++;
+        return 0;//game continues
 
     }
 
@@ -188,9 +190,9 @@ const displayController = (function(){
         }
     }
 
-    const displayTurn = function(player){
+    const displayTurn = function(){
         const container = document.querySelector(".player-turn span");
-        container.textContent = player;
+        container.textContent = gameController.getplayerTurn();
     }
 
     const attachClicks = function(){
@@ -208,17 +210,39 @@ const displayController = (function(){
 
     }
 
+
+    // displays a text message when there is a winner or a game is a draw
+    const displayMessage = function(){
+        const container = document.querySelector(".game-state");
+        const turnContainer = document.querySelector(".player-turn")
+        if(gameState == 1){ //winner
+            container.classList.remove("hidden");
+            turnContainer.classList.add("hidden");
+            container.textContent = `The winner is ${gameController.getplayerTurn()}`;
+        }else if(gameState == -1){//draw
+            container.classList.remove("hidden");
+            turnContainer.classList.add("hidden");
+            container.textContent = `The Game is a Draw`;
+        }else if(gameState == 0){//reset
+            turnContainer.classList.remove("hidden");
+            container.classList.add("hidden");
+            container.textContent = ``;
+            displayTurn();
+
+        }
+    }
+
     const playRound = function(event){
         let box = event.srcElement;
         let position =box.dataset.position; 
 
-        if(box.classList.contains("cross","circle") | gameState!=0 ) return;
+        if(box.classList.contains("circle")||box.classList.contains("cross") || gameState!=0 ) return;//check if square is occupied or game ended
 
         addPiece(position,gameController.getplayerTurn());
         gameState = gameController.playRound(position);
         displayTurn(gameController.getplayerTurn());
 
-        if(gameState==1)console.log("We have a winner")
+        displayMessage();
         
     }
 
@@ -226,6 +250,7 @@ const displayController = (function(){
         clearBoard();
         gameController.resetGame();
         gameState=0;
+        displayMessage();
     }
 
     return {displayGrid,addPiece,displayTurn,attachClicks}
@@ -234,4 +259,10 @@ const displayController = (function(){
 })();
 
 displayController.displayGrid();
-displayController.attachClicks();
+
+let startBtn = document.getElementById("start_btn");
+startBtn.addEventListener("click",(event)=>{
+    displayController.attachClicks();
+    event.target.disabled = true;
+
+});

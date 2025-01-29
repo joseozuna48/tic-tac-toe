@@ -84,3 +84,12 @@
     background-image: url("./assets/circle.svg");
 
   }
+
+  .hidden{
+    display: none;
+  }
+
+  .game-state{
+    font-size: 2rem;
+    font-weight: bold;
+  }
